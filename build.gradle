@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.telegram'
+version '1.0-SNAPSHOT'
+
+mainClassName = 'com.telegram.getluckybot.Main'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes 'Main-Class': 'com.telegram.getluckybot.Main'
+    }
+
+    archiveBaseName = 'GetLuckyBot'
+    archiveVersion =  '1.0'
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    implementation 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    implementation 'org.telegram:telegrambots:6.1.0'
+    implementation 'org.slf4j:slf4j-api:2.0.3'
+    implementation 'org.slf4j:slf4j-simple:2.0.3'
+}
