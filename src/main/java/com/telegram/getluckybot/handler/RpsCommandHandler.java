@@ -5,6 +5,7 @@ import com.telegram.getluckybot.model.RequestMessage;
 import com.telegram.getluckybot.model.RpsType;
 import com.telegram.getluckybot.util.CallbackDataUtil;
 import com.telegram.getluckybot.util.RpsUserSelectionCache;
+import com.telegram.getluckybot.util.SendMessageUtil;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -18,11 +19,8 @@ public class RpsCommandHandler implements Handler {
     public SendMessage handle(RequestMessage message) {
         clearCacheForChat(message.getChatId());
 
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setText("Select a weapon\\!");
-        sendMessage.setChatId(message.getChatId());
+        SendMessage sendMessage = SendMessageUtil.of(message.getChatId(), "Select a weapon!");
         sendMessage.setReplyMarkup(getSettingsInlineKeyboard());
-        sendMessage.enableMarkdownV2(true);
         return sendMessage;
     }
 

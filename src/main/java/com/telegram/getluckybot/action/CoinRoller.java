@@ -7,7 +7,7 @@ public class CoinRoller implements Action {
     private static final String[] SIDES = new String[] {"Heads", "Tails"};
     private static final int MAX = 2;
 
-    private Random random;
+    private final Random random;
 
     public CoinRoller() {
         this.random = new Random();

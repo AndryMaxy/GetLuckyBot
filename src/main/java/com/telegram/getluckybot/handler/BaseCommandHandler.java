@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 public class BaseCommandHandler implements Handler {
 
-    private Action action;
+    private final Action action;
 
     public BaseCommandHandler(Action action) {
         this.action = action;

@@ -27,7 +27,7 @@ public class RpsSelectionCommandHandler implements Handler {
                 .anyMatch(id -> message.getFrom().getId().equals(id));
 
         if (alreadySelected) {
-            return "Wait for an opponent\\!";
+            return "Wait for an opponent!";
         }
 
         if (selections.size() < 2) {
@@ -44,10 +44,10 @@ public class RpsSelectionCommandHandler implements Handler {
 
         if (selections.size() > 2) {
             RpsUserSelectionCache.remove(message.getChatId());
-            return "There is a bug so you all lose\\! Try again\\.";
+            return "There is a bug so you all lose! Try again.";
         }
 
-        return String.format("%s waits for an opponent\\!", getName(message.getFrom()));
+        return String.format("%s waits for an opponent!", getName(message.getFrom()));
     }
 
     private String vs(List<RpsUserSelection> selections) {
@@ -62,13 +62,13 @@ public class RpsSelectionCommandHandler implements Handler {
         } else if (result == -1) {
             resultText = getWinner(s2);
         } else {
-            resultText = String.format("It is draw\\. You both selected %s\\.", rpsType.name());
+            resultText = String.format("It is draw. You both selected %s.", rpsType.name());
         }
         return resultText;
     }
 
     private String getWinner(RpsUserSelection winner) {
-        return String.format("%s won with %s\\!", getName(winner.getUser()), winner.getRpsType().name());
+        return String.format("%s won with %s!", getName(winner.getUser()), winner.getRpsType().name());
     }
 
     private String getName(User user) {

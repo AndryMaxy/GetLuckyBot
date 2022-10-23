@@ -6,7 +6,7 @@ public class Roller implements Action {
 
     private static final int MAX = 101;
 
-    private Random random;
+    private final Random random;
 
     public Roller() {
         this.random = new Random();
