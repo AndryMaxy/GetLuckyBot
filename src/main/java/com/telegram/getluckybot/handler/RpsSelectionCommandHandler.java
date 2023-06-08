@@ -5,10 +5,9 @@ import com.telegram.getluckybot.model.RpsType;
 import com.telegram.getluckybot.model.RpsUserSelection;
 import com.telegram.getluckybot.util.RpsUserSelectionCache;
 import com.telegram.getluckybot.util.SendMessageUtil;
+import java.util.List;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.User;
-
-import java.util.*;
 
 public class RpsSelectionCommandHandler implements Handler {
 
@@ -23,7 +22,7 @@ public class RpsSelectionCommandHandler implements Handler {
         List<RpsUserSelection> selections = RpsUserSelectionCache.get(chatId);
 
         boolean alreadySelected = selections.stream()
-                .map(s -> s.getUser().getId())
+                .map(s -> s.user().getId())
                 .anyMatch(id -> message.getFrom().getId().equals(id));
 
         if (alreadySelected) {
@@ -55,8 +54,8 @@ public class RpsSelectionCommandHandler implements Handler {
         RpsUserSelection s2 = selections.get(1);
 
         String resultText;
-        RpsType rpsType = s1.getRpsType();
-        int result = s1.getRpsType().vs(s2.getRpsType());
+        RpsType rpsType = s1.rpsType();
+        int result = s1.rpsType().vs(s2.rpsType());
         if (result == 1) {
             resultText = getWinner(s1);
         } else if (result == -1) {
@@ -68,7 +67,7 @@ public class RpsSelectionCommandHandler implements Handler {
     }
 
     private String getWinner(RpsUserSelection winner) {
-        return String.format("%s won with %s!", getName(winner.getUser()), winner.getRpsType().name());
+        return String.format("%s won with %s!", getName(winner.user()), winner.rpsType().name());
     }
 
     private String getName(User user) {

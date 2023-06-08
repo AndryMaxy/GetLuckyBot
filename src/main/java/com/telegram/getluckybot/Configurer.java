@@ -3,18 +3,24 @@ package com.telegram.getluckybot;
 import com.telegram.getluckybot.action.Action;
 import com.telegram.getluckybot.action.CoinRoller;
 import com.telegram.getluckybot.action.Roller;
-import com.telegram.getluckybot.handler.*;
-import lombok.experimental.UtilityClass;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-
+import com.telegram.getluckybot.handler.BaseCommandHandler;
+import com.telegram.getluckybot.handler.Handler;
+import com.telegram.getluckybot.handler.NoCommandHandler;
+import com.telegram.getluckybot.handler.RpsCommandHandler;
+import com.telegram.getluckybot.handler.RpsSelectionCommandHandler;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-@UtilityClass
-public final class Configuration {
+public final class Configurer {
 
-    public static TelegramLongPollingBot newBot(String token) {
+    private final String token;
+
+    public Configurer(String token) {
+        this.token = token;
+    }
+
+    public Config configure() {
         Map<String, Handler> handlerMap = new HashMap<>();
         handlerMap.put(Commands.COIN.getAddress(), newCoinCommandHandler());
         handlerMap.put(Commands.ROLL.getAddress(), newRollCommandHandler());
@@ -22,44 +28,44 @@ public final class Configuration {
         handlerMap.put(Commands.HELP.getAddress(), newHelpCommandHandler());
         handlerMap.put(Commands.NO_COMMAND.getName(), newNoCommandHandler());
         handlerMap.put(Commands.RPS_SELECTED.getAddress(), newRpsSelectionCommandHandler());
-        return new Bot(token, handlerMap);
+        return new Config(token, handlerMap);
     }
 
-    private static final String USER_COMMANDS = getUserCommandsDescriptionText();
+    private final String userCommands = getUserCommandsDescriptionText();
 
-    private static Action newCoinRollerAction() {
+    private Action newCoinRollerAction() {
         return new CoinRoller();
     }
 
-    private static Action newRollerAction() {
+    private Action newRollerAction() {
         return new Roller();
     }
 
-    private static Handler newCoinCommandHandler() {
+    private Handler newCoinCommandHandler() {
         return new BaseCommandHandler(newCoinRollerAction());
     }
 
-    private static Handler newRollCommandHandler() {
+    private Handler newRollCommandHandler() {
         return new BaseCommandHandler(newRollerAction());
     }
 
-    private static Handler newHelpCommandHandler() {
-        return new BaseCommandHandler(() -> "Look at the commands:\n" + USER_COMMANDS);
+    private Handler newHelpCommandHandler() {
+        return new BaseCommandHandler(() -> "Look at the commands:\n" + userCommands);
     }
 
-    private static Handler newRpsCommandHandler() {
+    private Handler newRpsCommandHandler() {
         return new RpsCommandHandler();
     }
 
-    private static Handler newRpsSelectionCommandHandler() {
+    private Handler newRpsSelectionCommandHandler() {
         return new RpsSelectionCommandHandler();
     }
 
-    private static Handler newNoCommandHandler() {
-        return new NoCommandHandler(() -> USER_COMMANDS);
+    private Handler newNoCommandHandler() {
+        return new NoCommandHandler(() -> userCommands);
     }
 
-    private static String getUserCommandsDescriptionText() {
+    private String getUserCommandsDescriptionText() {
         return Arrays.stream(Commands.values())
                 .filter(command -> command.getType() == Commands.Type.USER)
                 .map(Commands::toString)

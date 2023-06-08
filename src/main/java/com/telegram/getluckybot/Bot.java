@@ -2,23 +2,22 @@ package com.telegram.getluckybot;
 
 import com.telegram.getluckybot.handler.Handler;
 import com.telegram.getluckybot.model.RequestMessage;
+import java.util.Map;
+import java.util.Optional;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Map;
-import java.util.Optional;
-
 public class Bot extends TelegramLongPollingBot {
 
     private final Map<String, Handler> handlerMap;
     private final String token;
 
-    public Bot(String token, Map<String, Handler> handlerMap) {
-        this.token = token;
-        this.handlerMap = handlerMap;
+    public Bot(Config config) {
+        this.token = config.token();
+        this.handlerMap = config.handlerMap();
     }
 
     @Override
