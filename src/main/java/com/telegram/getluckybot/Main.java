@@ -17,6 +17,7 @@ public class Main {
         Config config = configurer.configure();
         Bot bot = new Bot(config);
         api.registerBot(bot);
+        System.out.println("Bot is running...");
     }
 
     private static String getToken(String[] args) {

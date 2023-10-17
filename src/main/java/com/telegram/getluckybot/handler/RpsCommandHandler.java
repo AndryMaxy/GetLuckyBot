@@ -5,19 +5,30 @@ import com.telegram.getluckybot.model.RequestMessage;
 import com.telegram.getluckybot.model.RpsType;
 import com.telegram.getluckybot.util.CallbackDataUtil;
 import com.telegram.getluckybot.util.RpsUserSelectionCache;
+import com.telegram.getluckybot.util.RpsWinnerCache;
 import com.telegram.getluckybot.util.SendMessageUtil;
+import java.util.ArrayList;
+import java.util.List;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RpsCommandHandler implements Handler {
+
+    private final RpsUserSelectionCache selectionCache;
+    private final RpsWinnerCache winnerCache;
+
+    public RpsCommandHandler(
+        RpsUserSelectionCache selectionCache,
+        RpsWinnerCache winnerCache
+    ) {
+        this.winnerCache = winnerCache;
+        this.selectionCache = selectionCache;
+    }
 
     @Override
     public SendMessage handle(RequestMessage message) {
-        clearCacheForChat(message.getChatId());
+        clearChatCache(message.getChatId());
 
         SendMessage sendMessage = SendMessageUtil.of(message.getChatId(), "Select a weapon!");
         sendMessage.setReplyMarkup(getSettingsInlineKeyboard());
@@ -54,7 +65,8 @@ public class RpsCommandHandler implements Handler {
         return CallbackDataUtil.toCallbackData(Commands.RPS_SELECTED.getAddress(), type.name());
     }
 
-    private void clearCacheForChat(String chatId) {
-        RpsUserSelectionCache.remove(chatId);
+    private void clearChatCache(String chatId) {
+        selectionCache.remove(chatId);
+        winnerCache.remove(chatId);
     }
 }

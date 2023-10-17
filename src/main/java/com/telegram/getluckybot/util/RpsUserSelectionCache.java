@@ -1,26 +1,27 @@
 package com.telegram.getluckybot.util;
 
 import com.telegram.getluckybot.model.RpsUserSelection;
-import lombok.experimental.UtilityClass;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-@UtilityClass
 public final class RpsUserSelectionCache {
 
-    private static final ConcurrentHashMap<String, List<RpsUserSelection>> CACHE = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, List<RpsUserSelection>> cache;
 
-    public static void put(String key, List<RpsUserSelection> selections) {
-        CACHE.put(key, selections);
+    public RpsUserSelectionCache() {
+        this.cache = new ConcurrentHashMap<>();
     }
 
-    public static List<RpsUserSelection> get(String key) {
-        return CACHE.getOrDefault(key, new ArrayList<>());
+    public void put(String key, List<RpsUserSelection> selections) {
+        cache.put(key, selections);
     }
 
-    public static void remove(String key) {
-        CACHE.remove(key);
+    public List<RpsUserSelection> get(String key) {
+        return cache.getOrDefault(key, new ArrayList<>());
+    }
+
+    public void remove(String key) {
+        cache.remove(key);
     }
 }

@@ -8,6 +8,8 @@ import com.telegram.getluckybot.handler.Handler;
 import com.telegram.getluckybot.handler.NoCommandHandler;
 import com.telegram.getluckybot.handler.RpsCommandHandler;
 import com.telegram.getluckybot.handler.RpsSelectionCommandHandler;
+import com.telegram.getluckybot.util.RpsUserSelectionCache;
+import com.telegram.getluckybot.util.RpsWinnerCache;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,13 +23,24 @@ public final class Configurer {
     }
 
     public Config configure() {
+        RpsUserSelectionCache rpsUserSelectionCache = rpsUserSelectionCache();
+        RpsWinnerCache rpsWinnerCache = rpsWinnerCache();
+        Handler rpsSelectionCommandHandler = newRpsSelectionCommandHandler(
+            rpsUserSelectionCache,
+            rpsWinnerCache
+        );
+        Handler rpsCommandHandler = newRpsCommandHandler(
+            rpsUserSelectionCache,
+            rpsWinnerCache
+        );
+
         Map<String, Handler> handlerMap = new HashMap<>();
         handlerMap.put(Commands.COIN.getAddress(), newCoinCommandHandler());
         handlerMap.put(Commands.ROLL.getAddress(), newRollCommandHandler());
-        handlerMap.put(Commands.RPS.getAddress(), newRpsCommandHandler());
+        handlerMap.put(Commands.RPS.getAddress(), rpsCommandHandler);
         handlerMap.put(Commands.HELP.getAddress(), newHelpCommandHandler());
         handlerMap.put(Commands.NO_COMMAND.getName(), newNoCommandHandler());
-        handlerMap.put(Commands.RPS_SELECTED.getAddress(), newRpsSelectionCommandHandler());
+        handlerMap.put(Commands.RPS_SELECTED.getAddress(), rpsSelectionCommandHandler);
         return new Config(token, handlerMap);
     }
 
@@ -53,12 +66,26 @@ public final class Configurer {
         return new BaseCommandHandler(() -> "Look at the commands:\n" + userCommands);
     }
 
-    private Handler newRpsCommandHandler() {
-        return new RpsCommandHandler();
+    private Handler newRpsCommandHandler(
+        RpsUserSelectionCache selectionCache,
+        RpsWinnerCache winnerCache
+    ) {
+        return new RpsCommandHandler(selectionCache, winnerCache);
     }
 
-    private Handler newRpsSelectionCommandHandler() {
-        return new RpsSelectionCommandHandler();
+    private Handler newRpsSelectionCommandHandler(
+        RpsUserSelectionCache selectionCache,
+        RpsWinnerCache winnerCache
+    ) {
+        return new RpsSelectionCommandHandler(selectionCache, winnerCache);
+    }
+
+    private RpsWinnerCache rpsWinnerCache() {
+        return new RpsWinnerCache(5);
+    }
+
+    private RpsUserSelectionCache rpsUserSelectionCache() {
+        return new RpsUserSelectionCache();
     }
 
     private Handler newNoCommandHandler() {
