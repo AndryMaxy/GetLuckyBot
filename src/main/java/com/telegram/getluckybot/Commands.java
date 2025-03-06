@@ -7,6 +7,7 @@ public enum Commands {
     COIN("coin", "/coin", Type.USER, "heads or tails"),
     ROLL("roll", "/roll", Type.USER,"generates a number from 0 to 100"),
     RPS("rps", "/rps", Type.USER, "rock-paper-scissors"),
+    CHEER_UP("cheer_up", "/cheer-up", Type.USER, "compliments to cheer up"),
     HELP("help", "/help", Type.USER, "list of commands"),
     RPS_SELECTED("rps-selected", "/rps-selected", Type.SYSTEM, "system command"),
     NO_COMMAND("no-command", "/", Type.SYSTEM, "system command");

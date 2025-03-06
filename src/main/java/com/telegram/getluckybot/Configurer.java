@@ -1,6 +1,7 @@
 package com.telegram.getluckybot;
 
 import com.telegram.getluckybot.action.Action;
+import com.telegram.getluckybot.action.CheerUp;
 import com.telegram.getluckybot.action.CoinRoller;
 import com.telegram.getluckybot.action.Roller;
 import com.telegram.getluckybot.handler.BaseCommandHandler;
@@ -38,6 +39,7 @@ public final class Configurer {
         handlerMap.put(Commands.COIN.getAddress(), newCoinCommandHandler());
         handlerMap.put(Commands.ROLL.getAddress(), newRollCommandHandler());
         handlerMap.put(Commands.RPS.getAddress(), rpsCommandHandler);
+        handlerMap.put(Commands.CHEER_UP.getAddress(), newCheerUpCommandHandler());
         handlerMap.put(Commands.HELP.getAddress(), newHelpCommandHandler());
         handlerMap.put(Commands.NO_COMMAND.getName(), newNoCommandHandler());
         handlerMap.put(Commands.RPS_SELECTED.getAddress(), rpsSelectionCommandHandler);
@@ -50,12 +52,20 @@ public final class Configurer {
         return new CoinRoller();
     }
 
+    private Action newCheerUpAction() {
+        return new CheerUp();
+    }
+
     private Action newRollerAction() {
         return new Roller();
     }
 
     private Handler newCoinCommandHandler() {
         return new BaseCommandHandler(newCoinRollerAction());
+    }
+
+    private Handler newCheerUpCommandHandler() {
+        return new BaseCommandHandler(newCheerUpAction());
     }
 
     private Handler newRollCommandHandler() {
